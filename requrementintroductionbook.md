@@ -44,19 +44,19 @@
 
 ![](/assets/3.PNG)  
 此图为图四  
-\(1\)位置变量 ：   
+\(1\)位置变量 ：  
 座\(seat\) ;  
 上背\(upBack\) ;  
 下背\(downBack\) ;  
 背顶\(backTop\) ;  
 坐前上\(seatFrontUp\) ;  
 坐前下\(seatFrontDown\) ;  
-坐侧 \(seatSide\) ;   
+坐侧 \(seatSide\) ;  
 背侧 \(backSide\) ;  
 背后 \(back\);  
 扶手前 \(railFront\) ;
 
-\(2\) 各位置属性   
+\(2\) 各位置属性  
 密度 \(density\) ;  
 厚度 \(thickness\) ;  
 宽度 \(width\) ;  
