@@ -2,7 +2,7 @@
 
 | AutoCAD | VS | .NetFramework | 备注 |
 | :--- | :--- | :--- | :--- |
-| 2015 | 2012 | 4.5 | |
+| 2015 | 2012 | 4.5 |  |
 | 2012-2014 | 2010/2012 | 4.0 | 也有用vs10开发在08cad运行        .net4.0有DLR |
 | 2010-2011 | 2008 | 3.5 | cad10-12用户28%第二多 推荐 也有用vs08在cad08运行   .net3.0之后有LINQ,wpf,wf,wcf |
 
@@ -18,4 +18,10 @@
 | **AcCoreMgd.dll** | 处理编辑器、发布与打印、定义AutoLISP命令和函数 | AutoCAD 2014版 |
 
 这四个引用 的位置可以在CAD的安装路径下找到，（&lt;盘符&gt;:\program Files\AutoCAD 20xx），
+
+_**注意 :**_ 新建类库项目，添加AcDbMgd和AcMgd 等引用，将引用的"复制本地"属性设置为False
+
+
+
+综合一下，我的开发环境就用 ： vs 2010 ，AutoCAD 2012， office 2010
 
