@@ -1,0 +1,3 @@
+lenovo
+LENOVO-PC 
+2018Äê1ÔÂ21ÈÕ  15:15:56
