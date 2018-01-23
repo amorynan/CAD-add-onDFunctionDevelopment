@@ -34,3 +34,11 @@ _**注意 :**_ 新建类库项目，添加AcDbMgd和AcMgd 等引用，将引用�
 
 
 
+#### AutoCAD add in wizard
+
+一个增强性生成程序和命令的工具
+
+
+
+
+
