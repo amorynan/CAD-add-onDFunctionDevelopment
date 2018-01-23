@@ -21,7 +21,16 @@
 
 _**注意 :**_ 新建类库项目，添加AcDbMgd和AcMgd 等引用，将引用的"复制本地"属性设置为False
 
+综合一下，我的开发环境就用 ： vs 2013 ，AutoCAD 2012， office 2010
+
+### Hello CAD :
+
+1. 上面的四个动态链接库是需要引入的，这里面是autocad 关于 .net的托管类库
+2. autocad 在加载程序集的时候，先会查找这里面有没有ExtensionApplication 类型的自定义属性，如果找到后会把与该属性有联系的类作为程序的入口点，如果没有，就会查找实现了IExtensionApplication接口的类，如果还没有，则跳过程序初始化工作，在找IExtensionApplication接口类同时还会去在程序集中查找所有的CommandClass属性，找到了，则在执行cad 命令的时候，就只会去搜索相关commandclass属性的类，否则要搜索所有的类。
+
+   ExtensionApplication 和 CommandClass属于程序级别的属性，告诉了cad去哪里获取不同的对象，否则则需要查找才能区分对象的区别ExtensionApplication 属性只能被附加到一个类中，这个类还必须实现IExtensionApplication 接口，而CommandClass可以被添加到任何一个定义了cad命令的类，
+
+3. 调试，异常处理 : autocad 在runtime类库中定义了Exception类，这个类最重要的两个属性 Message 和 Source
 
 
-综合一下，我的开发环境就用 ： vs 2010 ，AutoCAD 2012， office 2010
 
