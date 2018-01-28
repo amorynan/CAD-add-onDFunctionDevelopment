@@ -8,5 +8,6 @@
 
 ## Methods
 
-* [Defining Methods](methods.md)
+* [创建和编辑基本图形对象](methods.md)
+* [选择集用法及其开发](xuan-ze-ji-yong-fa-ji-qi-kai-fa.md)
 

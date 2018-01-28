@@ -8,7 +8,7 @@
 
 所以我们在创建一个基本的图形对象的基本步骤：
 
-  1. 得到创建对象的图形数据库
+1. 得到创建对象的图形数据库
 
 ```
 Database db = HostApplicationServices.WorkingDatabase
@@ -20,7 +20,7 @@ Database db = HostApplicationServices.WorkingDatabase
 Circle cirlce = new Circle(center, Vector3d.ZAxis, 10.0);
 ```
 
- 3. 打开图形数据库的块表\(一般在打开块表的时候会用事件操作,主要是为了保证插入表中的数据的ACID特性\)
+  3. 打开图形数据库的块表\(一般在打开块表的时候会用事件操作,主要是为了保证插入表中的数据的ACID特性\)
 
 ```
 using (Transaction trans = db.TransactionManager.StartTransaction()){
@@ -47,6 +47,10 @@ trans.AddNewlyCreatedDBObject(cirlce, true);
     trans.Commit();         
 }
 ```
+
+
+
+##### _**注意一点 ： 在开发的时候我创建的圆在模型空间里看不到，但是打开布局里面又存在，我的情况是在模型空间里的比例不对，也就是创建的圆半径小，看不到，这时候解决方法，可以输入命令Z之后，在输入命令A 进行缩放，就可以看到了。**_
 
 
 
