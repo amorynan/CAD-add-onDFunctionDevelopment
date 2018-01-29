@@ -131,9 +131,52 @@
         }
 ```
 
-LINQ 的使用简化选择集操作 -- 主要是对选择的集合对象进行排序，筛选，分组等等操作，要理解这一系列操作其实不难，因为这些实体对象都是储存在块表中的，也就是我们在对数据库中的表进行操作，所以其实数据库中的操作，这里都能做，LINQ的功能也就是封装提供直接的数据库表的功能的API 
+LINQ 的使用简化选择集操作 -- 主要是对选择的集合对象进行排序，筛选，分组等等操作，要理解这一系列操作其实不难，因为这些实体对象都是储存在块表中的，也就是我们在对数据库中的表进行操作，所以其实数据库中的操作，这里都能做，LINQ的功能也就是封装提供直接的数据库表的功能的API
 
-_**注意一点 ： LINQ的对象需要实现IEnumerable&lt;T&gt;接口。并且LINQ的查询表达式是在最近一次创建对 象时才被编译的，关于LINQ的运用，我们可以进行自定义特定条件的类实现此接口，然后进行LINQ选择集的遍历**_
+_**注意一点 ： LINQ的对象需要实现IEnumerable&lt;T&gt;接口。并且LINQ的查询表达式是在最近一次创建对 象时才被编译的，关于LINQ的运用，我们可以进行自定义特定条件的类实现此接口，然后进行LINQ选择集的遍历,也就是自定义LINQ适配器**_
+
+官方参考文档，里面主要是LINQ目前实现的方法
+
+[https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/index](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/index)
+
+
+
+具体思路做法 ： 
+
+step 1 ：get database source - 获取数据源
+
+```
+eg List<Circles> circles = new List<Circle>();
+```
+
+  再次注意，这里的数据源一定是_**实现IEnumerable&lt;T&gt;接口的对象**_
+
+step 2 ：create select statements -- 创建查询语句，这一步其实就是对关系型数据库查询语句的自我封装后提供的API的调用，详细的上面官方文档有，请自行根据自己目前的需求查找
+
+```
+var cir = from c in circles
+                where c.colorIndex == 1
+                select c; // 转变查询 : select new{Area = c.Area} 选择集的结果就变成了c的面积
+```
+
+
+
+step 3 : carry on the selection  -- 执行查询， 也就是要对查询的结果集进行一个foreach的遍历操作，去输出我们的东西，也就是客户端和数据源之间的数据互显示
+
+```
+foreach(var c in cir){
+    // do something with the res cir
+    ed.writeMessage(c.Area.ToString()); // 有这一句才会执行上面的查询语句，这也正好体现了LINQ的上下文编译的特性
+}
+```
+
+特别强调的一点是LINQ操作是属于数据延迟查询操作，也就是你没有要用你查询的结果集，他是不会执行查询操作的，更直白的就是，你没有第三步，第二步他不会给你做，但也有不做第三步，强制让他立即查询的方法，就是，在LINQ语句中调用ToList 或者 ToArray将查询的结果集进行转变成列表和数组
+
+```
+var cir = (from c in circles
+                where c.colorIndex == 1
+                select c).ToList();
+```
 
 
 
