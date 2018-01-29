@@ -56,22 +56,80 @@
             if (psr_.Status != PromptStatus.OK) return;
 
             Application.ShowAlertDialog("the second selection "+psr_.Value.Count.ToString()+" objects here");
-            
+
             // merge -- linq union function
             var ss = psr.Value.GetObjectIds().Union(psr_.Value.GetObjectIds()); // 这里用的是var 弱类型，是由编译器在初始化语句时根据右边的表达式来推断的类型，结果返回的依然是强类型变量,或者说泛型变量
-            
+
             Application.ShowAlertDialog("there are merge selection : "+ss.Count().ToString());
 
         }
 ```
 
-用法三 ： 删除选择集中的对象
+用法三 ： 删除选择集中的另外的选择集（缩小选择的范围）
 
 ```
+[CommandMethod("deleteSelection")]
+        public void deleteSelection()
+        {
+            Document doc = Application.DocumentManager.MdiActiveDocument;
+            Database db = doc.Database;
+            Editor ed = doc.Editor;
 
+            PromptSelectionResult psr = ed.GetSelection(); // get the first selection
+            if (psr.Status != PromptStatus.OK) return; // if selection failed , return 
+
+            Application.ShowAlertDialog("there are " + psr.Value.Count.ToString() + " objects here");
+
+            PromptSelectionResult psr_ = ed.GetSelection(); // the second selection
+            if (psr_.Status != PromptStatus.OK) return;
+
+            Application.ShowAlertDialog("the second selection " + psr_.Value.Count.ToString() + " objects here");
+
+            // merge -- linq Except function
+            var ss = psr.Value.GetObjectIds().Except(psr_.Value.GetObjectIds()); // 这里用的是var 弱类型，是由编译器在初始化语句时根据右边的表达式来推断的类型，结果返回的依然是强类型变量,或者说泛型变量
+
+            Application.ShowAlertDialog("there are delete selection : " + ss.Count().ToString());
+        }
 ```
+
+当然还有选择集求交集的函数 ,跟上面的union和delete的一样只是改了LINQ的函数为Intersect
 
 用法四 ： 测试 先选择，后操作
+
+```
+[CommandMethod("PickFirst",CommandFlags.UsePickSet  )]
+        public void pickFirst()
+        {
+            Document doc = Application.DocumentManager.MdiActiveDocument;
+            Database db = doc.Database;
+            Editor ed = doc.Editor;
+
+            PromptSelectionResult psr = ed.SelectImplied(); // get the selection before the command
+            if (psr.Status == PromptStatus.OK)
+            {
+                // if there are selection here
+                SelectionSet ss = psr.Value;
+
+                Application.ShowAlertDialog("there are "+ss.Count.ToString() + " objects before command");
+
+                // then clean the editor's selection
+                ed.SetImpliedSelection(new ObjectId[0]);
+
+                // then new selection 
+                psr = ed.GetSelection();
+                if (psr.Status == PromptStatus.OK)
+                {
+                    ed.SetImpliedSelection(psr.Value.GetObjectIds());
+                    Application.ShowAlertDialog("there are " + psr.Value.Count.ToString() + " objects after command");
+                }
+                else
+                {
+                    Application.ShowAlertDialog("there are none objects new here");
+                }
+            }
+
+        }
+```
 
 LINQ 的使用简化选择集操作
 
