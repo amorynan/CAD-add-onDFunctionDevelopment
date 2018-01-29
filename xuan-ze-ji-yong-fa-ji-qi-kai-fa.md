@@ -37,21 +37,43 @@
         }
 ```
 
-用法二 ： 合并选择集
+用法二 ： 合并选择集\(扩大你选择的范围\) -- 用到了LINQ 的 union 函数，其特点是，返回时IEnumberable&lt;T&gt; 泛型变量，用var 弱类型遍历装； 其次是union函数忽略相同相，也就是并集部分
 
+```
+ [CommandMethod("MergeSelection")]
+        public void mergeSelection()
+        {
+            Document doc = Application.DocumentManager.MdiActiveDocument;
+            Database db = doc.Database;
+            Editor ed = doc.Editor;
 
+            PromptSelectionResult psr = ed.GetSelection(); // get the first selection
+            if (psr.Status != PromptStatus.OK) return; // if selection failed , return 
+
+            Application.ShowAlertDialog("there are "+psr.Value.Count.ToString()+" objects here");
+
+            PromptSelectionResult psr_ = ed.GetSelection(); // the second selection
+            if (psr_.Status != PromptStatus.OK) return;
+
+            Application.ShowAlertDialog("the second selection "+psr_.Value.Count.ToString()+" objects here");
+            
+            // merge -- linq union function
+            var ss = psr.Value.GetObjectIds().Union(psr_.Value.GetObjectIds()); // 这里用的是var 弱类型，是由编译器在初始化语句时根据右边的表达式来推断的类型，结果返回的依然是强类型变量,或者说泛型变量
+            
+            Application.ShowAlertDialog("there are merge selection : "+ss.Count().ToString());
+
+        }
+```
 
 用法三 ： 删除选择集中的对象
 
+```
 
+```
 
 用法四 ： 测试 先选择，后操作
 
-
-
 LINQ 的使用简化选择集操作
-
-
 
 自定义对象的捕捉 （对于三视图中侧面图的文字对象的捕捉）
 
