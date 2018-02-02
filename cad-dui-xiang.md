@@ -46,7 +46,7 @@ Application 对象是 AutoCAD .NET API 对象模型的根对象。通过 Applica
 
 例如，Application 对象具有 DocumentManager 特性，该特性可以返回 DocumentManager 对象。该对象提供对AutoCAD中当前图形的访问并允许用户并允许用户创建、保存和打开图形文件。通过 Application 对象提供的其它特性可以专用数据，例如信息中心（InfoCenter）、主窗口（main window）和状态栏（status bar）。MainWindow 特性允许用户访问应用程序的名称、 大小、位置和可见性。
 
-虽然 Application 对象的特性允许访问 AutoCAD .NET API 的大多数对象，也有一些 AutoCAD ActiveX® Automation 对象的引用。这些特性包括 application 对象的 COM 版本\(AcadApplication\)，菜单栏\(MenuBar\),加载的菜单组 \(MenuGroups\)和参数选项 \(Preferences\)。
+虽然 Application 对象的特性允许访问 AutoCAD .NET API 的大多数对象，也有一些 AutoCAD ActiveX® Automation 对象的引用。这些特性包括 application 对象的 COM 版本\(AcadApplication\)，菜单栏\(MenuBar\),加载的菜单组 \(MenuGroups\)和参数选项 \(Preferences\)。
 
 ![](http://images.cnitblog.com/blog/31097/201409/011709443758631.jpg)
 
@@ -56,13 +56,13 @@ Document 对象实际上就是 AutoCAD 图形，它是 DocumentCollection 对象
 
 连同 Database 对象一起, Document 对象提供访问图形状态栏（StatusBar），document 对象被打开的窗口（Window），Editor （Editor） 和事务管理器（TransactionManager）的对象。Editor 提供用户以输入形式获取的点、输入字符串或数字值的功能。
 
-事务管理器对象用于访问将多个 database 对象下的单个操作当作一个 _transaction_ 对象。事务可以被嵌套，当用户完成事务时，可以提交或放弃已做的改变。
+事务管理器对象用于访问将多个 database 对象下的单个操作当作一个 _transaction_ 对象。事务可以被嵌套，当用户完成事务时，可以提交或放弃已做的改变。
 
 ![](http://images.cnitblog.com/blog/31097/201409/011708101253359.jpg)
 
 **3\)DataBase对象层次**
 
-Database 对象包括所有的图形和大部分非图形的 AutoCAD 对象。 被包含在 Database 中的一些对象有实体，符号表，命名字典。实体在 Database 中表示图纸内部的图形对象。直线、圆、圆弧、文本、填充和多段线都是实体的一个例子。用户可以在屏幕上看到一个实体并可以操作它。
+Database 对象包括所有的图形和大部分非图形的 AutoCAD 对象。 被包含在 Database 中的一些对象有实体，符号表，命名字典。_**实体在 Database 中表示图纸内部的图形对象。直线、圆、圆弧、文本、填充和多段线都是实体的一个例子**_。用户可以在屏幕上看到一个实体并可以操作它。  
 
 用户通过 Document 对象的 Database 成员属性可以访问当前文档的 Database 对象。
 
@@ -72,7 +72,7 @@ Application.DocumentManager.MdiActiveDocument.Database
 
 符号表和字典对象提供对非图形对象的访问（块、图层、线型、布局等等）。在AutoCAD中的每一个图形都包含9个固定的符号表，然而图形中的字典的数量是可以根据功能和应用程序的使用类型来改变的。新的符号表不能被添加到 Database 中去。
 
-例如，层表 \(_LayerTable_\)就是符号表，它包含层表记录，块表也是符号表，它包含块表记录。所有的图形实体 \(直线、圆、圆弧等等\) 都是属于一个块表记录。默认情况下，每一个图形都为模型空间和图纸空间预定义了块表记录。每一个图纸空间布局都有它自己的块表记录。
+例如，层表 \(_LayerTable_\)就是符号表，它包含层表记录，块表也是符号表，它包含块表记录。所有的图形实体 \(直线、圆、圆弧等等\) 都是属于一个块表记录。默认情况下，_**每一个图形都为模型空间和图纸空间预定义了块表记录。每一个图纸空间布局都有它自己的块表记录。**_
 
 字典是一个可以包含任何 AutoCAD 对象或 Xrecord 对象的容器。
 
