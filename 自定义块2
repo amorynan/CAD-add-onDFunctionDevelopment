@@ -1,0 +1,97 @@
+块参照和插入块
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.Runtime;
+using Autodesk.AutoCAD.EditorInput;
+using Autodesk.AutoCAD.Geometry;
+namespace AutoCAD二次开发2
+{
+class BlockTools
+{
+public ObjectId AddBlockTableRecord(this Database db, string blockName, List ents)
+{
+BlockTable bt = (BlockTable)db.BlockTableId.GetObject(OpenMode.ForRead);
+if(!bt.Has(blockName))
+{
+BlockTableRecord btr=new BlockTableRecord();
+btr.Name=blockName;
+ents.ForEach(ent =>btr.AppendEntity(ent));
+bt.UpgradeOpen();
+bt.Add(btr);
+db.TransactionManager.AddNewlyCreatedDBObject(btr,true);
+bt.DowngradeOpen();
+}
+return bt[blockName];
+}
+    public  ObjectId InsertBlockReference(this ObjectId spaceId, string layer, string blockName, Point3d position, Scale3d scale, double rotateAngle)
+    {
+        ObjectId blockRefId;
+        Database db = spaceId.Database;
+        BlockTable bt = (BlockTable)db.BlockTableId.GetObject(OpenMode.ForRead);
+        if (!bt.Has(blockName)) return ObjectId.Null;
+        BlockTableRecord space = (BlockTableRecord)spaceId.GetObject(OpenMode.ForWrite);
+        BlockReference br = new BlockReference(position, bt[blockName]);
+        br.ScaleFactors = scale;
+        br.Layer = layer;
+        br.Rotation = rotateAngle;
+        blockRefId = space.AppendEntity(br);
+        db.TransactionManager.AddNewlyCreatedDBObject(br, true);
+        space.DowngradeOpen();
+        return blockRefId;
+    }
+}
+}
+自定义实体
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.Runtime;
+using Autodesk.AutoCAD.EditorInput;
+using Autodesk.AutoCAD.Geometry;
+[assembly:CommandClass(typeof(AutoCAD二次开发2.Blocks))]
+namespace AutoCAD二次开发2
+{
+class Blocks
+{
+[CommandMethod("door")]
+BlockTools tools = new BlockTools();
+public void MakeDoor()
+{
+List ent = new List();
+Database db = HostApplicationServices.WorkingDatabase;
+using (Transaction trans = db.TransactionManager.StartOpenCloseTransaction())
+{
+Point3d pt1 = Point3d.Origin;
+Point3d pt2 = new Point3d(0, 1.0, 0);
+Line leftLine = new Line(pt1, pt2);
+Line rightLine=new Line(new Point3d(1,1,0),new Point3d(5,1,0));
+// Line bottomLine = new Line(pt1, pt1.PolarPoint(0, 0.05));
+Arc arc = new Arc();
+ent.Add(leftLine);
+ent.Add(rightLine);
+tools.AddBlockTableRecord(db, "door",ent);
+}
+}
+    [CommandMethod("InsertDoor")]
+    public void InsertDoor()
+    {
+        Database db = HostApplicationServices.WorkingDatabase;
+        ObjectId spaceId = db.CurrentSpaceId;
+        using (Transaction trans = db.TransactionManager.StartOpenCloseTransaction())
+        {
+            tools.InsertBlockReference(spaceId, "Doors", "Door",Point3d.Origin, new Scale3d(2), 0);
+            trans.Commit();
+        }
+    }
+
+}
+}
