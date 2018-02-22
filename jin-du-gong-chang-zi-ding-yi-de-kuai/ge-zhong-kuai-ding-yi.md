@@ -11,15 +11,12 @@ namespace JDS_CAD.VerticalViewBlock
 {
     interface BlockObject
     {
-       
+
     }
 }
-
 ```
 
 #### subclass block object
-
-
 
 180 ° 无角度
 
@@ -94,7 +91,6 @@ namespace JDS_CAD.VerticalViewBlock.blockSubClass
         }
     }
 }
-
 ```
 
 直角\(后改\)
@@ -113,7 +109,6 @@ namespace JDS_CAD.VerticalViewBlock.blockSubClass
 
     }
 }
-
 ```
 
 配置文件
@@ -123,14 +118,53 @@ namespace JDS_CAD.VerticalViewBlock.blockSubClass
 
 <configuration>
 
-	<appSettings>
+    <appSettings>
 
-		<add key="NoAngle" value="JDS_CAD.VerticalViewBlock.blockSubClass, JDS_CAD.VerticalViewBlock.blockSubClass.NoAngle" />
-		<add key="Right_Angle" value="JDS_CAD.VerticalViewBlock.blockSubClass, JDS_CAD.VerticalViewBlock.blockSubClass.Right_Angle" />
+        <add key="NoAngle" value="JDS_CAD.VerticalViewBlock.blockSubClass, JDS_CAD.VerticalViewBlock.blockSubClass.NoAngle" />
+        <add key="Right_Angle" value="JDS_CAD.VerticalViewBlock.blockSubClass, JDS_CAD.VerticalViewBlock.blockSubClass.Right_Angle" />
 
-	</appSettings>
+    </appSettings>
 
 </configuration>
+```
+
+block factory
+
+```
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using JDS_CAD.VerticalViewBlock.blockSubClass;
+
+namespace JDS_CAD.VerticalViewBlock
+{
+    class BlockFactory
+    { 
+
+        public static BlockObject CreateInstance(string blockName)
+        {
+            string txt = ConfigurationManager.AppSettings[blockName];
+            string nameSpacetxt = txt.Split(',')[0]; // 命名空间
+            string blockNametxt = txt.Split(',')[1]; // 定义的块的类名
+            Assembly assembly = Assembly.Load(nameSpacetxt);
+            Type type = assembly.GetType(blockNametxt);
+
+            return (BlockObject)Activator.CreateInstance(type);
+        }
+
+        public static string[] getAllBlockName()
+        {
+            string[] keys = ConfigurationManager.AppSettings.AllKeys;
+            return keys;
+        }
+    }
+}
+
 ```
 
 
