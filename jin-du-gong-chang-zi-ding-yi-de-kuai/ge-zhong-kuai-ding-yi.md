@@ -122,7 +122,7 @@ namespace JDS_CAD.VerticalViewBlock.blockSubClass
 
         <add key="NoAngle" value="JDS_CAD.VerticalViewBlock.blockSubClass, JDS_CAD.VerticalViewBlock.blockSubClass.NoAngle" />
         <add key="Right_Angle" value="JDS_CAD.VerticalViewBlock.blockSubClass, JDS_CAD.VerticalViewBlock.blockSubClass.Right_Angle" />
-
+    
     </appSettings>
 
 </configuration>
